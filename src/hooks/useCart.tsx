@@ -23,18 +23,50 @@ const CartContext = createContext<CartContextData>({} as CartContextData);
 
 export function CartProvider({ children }: CartProviderProps): JSX.Element {
   const [cart, setCart] = useState<Product[]>(() => {
-    // const storagedCart = Buscar dados do localStorage
+    const storagedCart = localStorage.getItem("@RocketShoes:cart");
 
-    // if (storagedCart) {
-    //   return JSON.parse(storagedCart);
-    // }
+    if (storagedCart) {
+      return JSON.parse(storagedCart);
+    }
 
     return [];
   });
 
   const addProduct = async (productId: number) => {
+    const tempArrayOfProducts = [];
     try {
-      // TODO
+      if (cart.length > 0) {
+        for (let x = 0; x < cart.length; x += 1) {
+          if (cart[x].id === productId) {
+            // se já existe, apenas incremente
+            tempArrayOfProducts.push({
+              id: cart[x].id,
+              title: cart[x].title,
+              price: cart[x].price,
+              image: cart[x].image,
+              amount: cart[x].amount + 1,
+            });
+          } else {
+            tempArrayOfProducts.push(cart[x]);
+          }
+        }
+        setCart(tempArrayOfProducts);
+        const tempCart = JSON.stringify(tempArrayOfProducts);
+        localStorage.setItem("@RocketShoes:cart", tempCart);
+      } else {
+        // apenas adiciona
+        api.get("products").then((response) => {
+          const arrProd = response.data;
+          for (let x = 0; x < arrProd.lenght; x += 1) {
+            if (productId === arrProd[x].id) {
+              setCart(arrProd[x]);
+              const tempCart = JSON.stringify(arrProd[x]);
+              localStorage.setItem("@RocketShoes:cart", tempCart);
+              break;
+            }
+          }
+        });
+      }
     } catch {
       // TODO
     }
