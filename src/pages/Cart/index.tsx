@@ -1,13 +1,13 @@
-import React from 'react';
+import React from "react";
 import {
   MdDelete,
   MdAddCircleOutline,
   MdRemoveCircleOutline,
-} from 'react-icons/md';
+} from "react-icons/md";
 
-// import { useCart } from '../../hooks/useCart';
-// import { formatPrice } from '../../util/format';
-import { Container, ProductTable, Total } from './styles';
+import { useCart } from "../../hooks/useCart";
+import { formatPrice } from "../../util/format";
+import { Container, ProductTable, Total } from "./styles";
 
 interface Product {
   id: number;
@@ -18,24 +18,34 @@ interface Product {
 }
 
 const Cart = (): JSX.Element => {
-  // const { cart, removeProduct, updateProductAmount } = useCart();
+  const { cart, removeProduct, updateProductAmount } = useCart();
 
-  // const cartFormatted = cart.map(product => ({
-  //   // TODO
-  // }))
-  // const total =
-  //   formatPrice(
-  //     cart.reduce((sumTotal, product) => {
-  //       // TODO
-  //     }, 0)
-  //   )
+  const cartFormatted = cart.map((product: Product) => ({
+    priceFormatted: product.price,
+    subTotal: product.price * product.amount,
+  }));
+  const total = formatPrice(
+    cart.reduce((sumTotal, product) => {
+      sumTotal += product.price * product.amount;
+
+      return sumTotal;
+    }, 0)
+  );
 
   function handleProductIncrement(product: Product) {
-    // TODO
+    const prod = {
+      productId: product.id,
+      amount: product.amount + 1,
+    };
+    updateProductAmount(prod);
   }
 
   function handleProductDecrement(product: Product) {
-    // TODO
+    const prod = {
+      productId: product.id,
+      amount: product.amount > 0 ? product.amount - 1 : 0,
+    };
+    updateProductAmount(prod);
   }
 
   function handleRemoveProduct(productId: number) {
@@ -57,7 +67,10 @@ const Cart = (): JSX.Element => {
         <tbody>
           <tr data-testid="product">
             <td>
-              <img src="https://rocketseat-cdn.s3-sa-east-1.amazonaws.com/modulo-redux/tenis1.jpg" alt="Tênis de Caminhada Leve Confortável" />
+              <img
+                src="https://rocketseat-cdn.s3-sa-east-1.amazonaws.com/modulo-redux/tenis1.jpg"
+                alt="Tênis de Caminhada Leve Confortável"
+              />
             </td>
             <td>
               <strong>Tênis de Caminhada Leve Confortável</strong>
@@ -68,8 +81,8 @@ const Cart = (): JSX.Element => {
                 <button
                   type="button"
                   data-testid="decrement-product"
-                // disabled={product.amount <= 1}
-                // onClick={() => handleProductDecrement()}
+                  // disabled={product.amount <= 1}
+                  // onClick={() => handleProductDecrement()}
                 >
                   <MdRemoveCircleOutline size={20} />
                 </button>
@@ -82,7 +95,7 @@ const Cart = (): JSX.Element => {
                 <button
                   type="button"
                   data-testid="increment-product"
-                // onClick={() => handleProductIncrement()}
+                  // onClick={() => handleProductIncrement()}
                 >
                   <MdAddCircleOutline size={20} />
                 </button>
@@ -95,7 +108,7 @@ const Cart = (): JSX.Element => {
               <button
                 type="button"
                 data-testid="remove-product"
-              // onClick={() => handleRemoveProduct(product.id)}
+                // onClick={() => handleRemoveProduct(product.id)}
               >
                 <MdDelete size={20} />
               </button>
