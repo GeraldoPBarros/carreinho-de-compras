@@ -68,6 +68,10 @@ const Home = (): JSX.Element => {
     loadProducts();
   }, []);
 
+  useEffect(() => {
+    console.log(products);
+  }, [products]);
+
   function handleAddProduct(id: number) {
     addProduct(id);
   }
