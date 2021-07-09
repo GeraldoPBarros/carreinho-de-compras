@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { MdAddShoppingCart } from "react-icons/md";
+import { MdAddShoppingCart, MdCardTravel } from "react-icons/md";
+import { toast } from "react-toastify";
 
 import { ProductList } from "./styles";
 import { api } from "../../services/api";
@@ -29,22 +30,22 @@ const Home = (): JSX.Element => {
     (sumAmount, product) => {
       switch (product.id) {
         case 1:
-          sumAmount[1] += 1;
+          sumAmount[1] += product.amount;
           break;
         case 2:
-          sumAmount[2] += 1;
+          sumAmount[2] += product.amount;
           break;
         case 3:
-          sumAmount[3] += 1;
+          sumAmount[3] += product.amount;
           break;
         case 4:
-          sumAmount[4] += 1;
+          sumAmount[4] += product.amount;
           break;
         case 5:
-          sumAmount[5] += 1;
+          sumAmount[5] += product.amount;
           break;
         case 6:
-          sumAmount[6] += 1;
+          sumAmount[6] += product.amount;
           break;
       }
 
@@ -69,17 +70,17 @@ const Home = (): JSX.Element => {
   }, []);
 
   useEffect(() => {
-    console.log(products);
-  }, [products]);
+    console.log(cart);
+  }, [cart]);
 
-  function handleAddProduct(id: number) {
+  async function handleAddProduct(id: number) {
     addProduct(id);
   }
 
   return (
     <ProductList>
       {products.map((product) => (
-        <li>
+        <li key={product.id}>
           <img src={product.image} alt={product.title} />
           <strong>{product.title}</strong>
           <span>{formatPrice(product.price)}</span>
